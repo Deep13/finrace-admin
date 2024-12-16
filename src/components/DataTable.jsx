@@ -1,5 +1,6 @@
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
+import { useMediaQuery, useTheme } from "@mui/material"
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -35,15 +36,42 @@ const rows = [
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function DataTable() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   return (
-    <Paper sx={{ height: 400, width: '100%' }}>
+    <Paper sx={{ height: 400, width: '100%',
+      maxWidth: isSmallScreen ? "100%" : "80%",
+      margin: "auto",
+      padding: isSmallScreen ? 1 : 2,
+      boxShadow: isSmallScreen ? "none" : theme.shadows[2],
+      borderRadius: theme.shape.borderRadius,
+       }}>
+        <p>Latest Data</p>
       <DataGrid
+        title="Latest Data"
+        editMode='row'
         rows={rows}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
-        sx={{ border: 0 }}
+        ed
+        sx={{
+          border: 0,
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: theme.palette.primary.main,
+            // color: theme.palette.common.white,
+            fontSize: "1rem",
+            fontWeight: "bold",
+          },
+          "& .MuiDataGrid-cell": {
+            padding: theme.spacing(1),
+            fontSize: "0.9rem",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+          },
+        }}
       />
     </Paper>
   );

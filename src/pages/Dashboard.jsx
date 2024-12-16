@@ -1,5 +1,5 @@
 import ReportCard from "../components/Card";
-import { Grid2 } from "@mui/material";
+import { Box, Grid2 } from "@mui/material";
 import AreaChart from "../components/LineChart"; // Import the area chart
 import HorizontalBarChart from "../components/BarChart"; // Import the horizontal bar chart
 
@@ -22,8 +22,8 @@ const Dashboard = () => {
     <div className="dashboard">
       <Grid2 container spacing={2} p={{ xs: 2, md: 4 }} justifyContent="center">
         {/* Top Section: Report Cards */}
-        <Grid2 container spacing={3} justifyContent="center">
-          <Grid2 xs={12} sm={6} md={3}>
+        <Grid2 container spacing={3} justifyContent="center" className="reportCards">
+          <Grid2 xs={12} sm={6} lg={3}>
             <ReportCard
               primary="$30200"
               secondary="All Earnings"
@@ -66,7 +66,7 @@ const Dashboard = () => {
         </Grid2>
 
         {/* Bottom Section: Area Charts */}
-        <Grid2 container spacing={2} justifyContent="center">
+        <Grid2 container spacing={5} justifyContent="center">
           <Grid2 xs={12} md={6}>
             <AreaChart
               title="Support Requests"
@@ -95,9 +95,12 @@ const Dashboard = () => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 container spacing={2} justifyContent="center">
+        {/* <div style={{ width: "100%", overflowX: "auto"}}>
           <DataTable/>
-        </Grid2>
+        </div> */}
+        <Box sx={{width:"100%",overflow:"auto", display:"table", tableLayout:"fixed"}}>
+          <DataTable/>
+        </Box>
       </Grid2>
     </div>
   );
