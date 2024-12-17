@@ -1,6 +1,6 @@
 import { Line } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -95,7 +95,7 @@ const AreaChart = ({ title, data, labels, color }) => {
         background: "#fff",
         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
         borderRadius: 2,
-        maxWidth: 300, // Limits the overall size of the chart
+        width: "100%", // Make the chart container take full width
       }}
     >
       <Typography
@@ -107,8 +107,8 @@ const AreaChart = ({ title, data, labels, color }) => {
       </Typography>
       <Box
         sx={{
-          width: 250, // Explicit chart width
-          height: 250, // Explicit chart height to make it smaller
+          width: "100%", // Ensure the chart uses the full width of its container
+          height: 300, // Adjust height to make the chart more prominent
           margin: "0 auto", // Center aligns the chart
         }}
       >
@@ -120,8 +120,9 @@ const AreaChart = ({ title, data, labels, color }) => {
 
 AreaChart.propTypes = {
   title: PropTypes.string,
-  data: PropTypes.object,
-  labels: PropTypes.object,
-  color: PropTypes.string
+  data: PropTypes.array,  // Ensure data is an array
+  labels: PropTypes.array, // Ensure labels are an array
+  color: PropTypes.string,
 };
+
 export default AreaChart;

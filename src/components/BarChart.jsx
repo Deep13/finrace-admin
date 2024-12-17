@@ -88,8 +88,8 @@ const HorizontalBarChart = ({ title, data, labels }) => {
         border: "1px solid #e0e0e0",
         borderRadius: "8px",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        padding: "20px",
-        marginTop: "20px",
+        width: '100%', // Ensures the chart takes up full available width
+        height: '100%', // Ensures the chart has a fixed height
       }}
     >
       <Typography 

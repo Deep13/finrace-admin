@@ -1,23 +1,63 @@
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import { useMediaQuery, useTheme } from "@mui/material"
+import { useMediaQuery, useTheme, IconButton } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+  const handleEdit = (event, row) => {
+    event.stopPropagation();  // Prevent row selection
+    console.log("Editing row: ", row);
+  };
+
+  const handleDelete = (event, id) => {
+    event.stopPropagation();  // Prevent row selection
+    console.log("Deleting row with ID: ", id);
+  };
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'First name', width: 130 },
-  { field: 'lastName', headerName: 'Last name', width: 130 },
+  { field: 'id', headerName: 'ID', flex: 1 },
+  { field: 'firstName', headerName: 'First name', flex: 1 },
+  { field: 'lastName', headerName: 'Last name', flex: 1 },
   {
     field: 'age',
     headerName: 'Age',
     type: 'number',
-    width: 90,
+    flex: 1,
   },
   {
     field: 'fullName',
     headerName: 'Full name',
     description: 'Full name of the person.',
-    width: 160,
+    flex: 2,  // This column will take more space compared to others
     valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
+  },
+  // Edit Column
+  {
+    field: 'edit',
+    headerName: 'Edit',
+    flex: 1,  // Make sure this takes its share of space
+    renderCell: (params) => (
+      <IconButton 
+        color="primary" 
+        onClick={(event) => handleEdit(event, params.row)}  // Added event parameter
+      >
+        <EditIcon />
+      </IconButton>
+    ),
+  },
+  // Delete Column
+  {
+    field: 'delete',
+    headerName: 'Delete',
+    flex: 1,  // Make sure this takes its share of space
+    renderCell: (params) => (
+      <IconButton 
+        color="secondary" 
+        onClick={(event) => handleDelete(event, params.row.id)}  // Added event parameter
+      >
+        <DeleteIcon />
+      </IconButton>
+    ),
   },
 ];
 
@@ -38,29 +78,27 @@ const paginationModel = { page: 0, pageSize: 5 };
 export default function DataTable() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
-    <Paper sx={{ height: 400, width: '100%',
-      maxWidth: isSmallScreen ? "100%" : "80%",
-      margin: "auto",
-      padding: isSmallScreen ? 1 : 2,
-      boxShadow: isSmallScreen ? "none" : theme.shadows[2],
+    <Paper sx={{ 
+      height: 400, 
+      width: '95%',  // Ensures full width
+      margin: "auto", 
+      padding: isSmallScreen ? 1 : 2, 
+      boxShadow: isSmallScreen ? "none" : theme.shadows[2], 
       borderRadius: theme.shape.borderRadius,
-       }}>
-        <p>Latest Data</p>
+    }}>
+      <p>Latest Data</p>
       <DataGrid
-        title="Latest Data"
-        editMode='row'
         rows={rows}
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={[5, 10]}
         checkboxSelection
-        ed
         sx={{
           border: 0,
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: theme.palette.primary.main,
-            // color: theme.palette.common.white,
             fontSize: "1rem",
             fontWeight: "bold",
           },
@@ -71,6 +109,7 @@ export default function DataTable() {
           "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
           },
+          width: '100%',
         }}
       />
     </Paper>
