@@ -23,6 +23,7 @@ import { useMediaQuery, InputBase, Avatar, Menu, MenuItem } from '@mui/material'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Outlet } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
 
 const drawerWidth = 240;
 
@@ -99,9 +100,17 @@ export default function Layout() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [open, setOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false); // Login state
+  const [isLoginPopupOpen, setLoginPopupOpen] = React.useState(false);
 
   // Menu anchor state for User Avatar dropdown
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
+  const handleLogout=()=>{
+    setIsLoggedIn(false);
+  }
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -138,36 +147,67 @@ export default function Layout() {
          
 
           {/* Right Section */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <SearchBar>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </SearchBar>
-            <IconButton color="inherit">
-              {/* <Badge badgeContent={4} color="error">
-                
-              </Badge> */}
-              <NotificationsNoneIcon />
-            </IconButton>
-            {/* User Avatar */}
-            <IconButton onClick={handleMenuOpen} color="inherit">
-              <Avatar alt="User Profile" src="/static/images/avatar/1.jpg" />
-            </IconButton>
-            {/* Dropdown Menu */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-              <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-            </Menu>
-          </Box>
+          {isLoggedIn?(
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <SearchBar>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </SearchBar>
+              <IconButton color="inherit">
+                {/* <Badge badgeContent={4} color="error">
+                  
+                </Badge> */}
+                <NotificationsNoneIcon />
+              </IconButton>
+              {/* User Avatar */}
+              <IconButton onClick={handleMenuOpen} color="inherit">
+                <Avatar alt="User Profile" src="/static/images/avatar/1.jpg" />
+              </IconButton>
+              {/* Dropdown Menu */}
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </Box>
+            
+          ):(
+            <Box
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 1,
+    cursor: 'pointer',
+    padding: '10px 20px',
+    borderRadius: '8px',
+    backgroundColor: '#1976d2', // Nice blue color
+    color: '#fff',
+    fontWeight: 'bold',
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      transform: 'scale(1.05)', // Slight scaling effect
+    },
+    '&:active': {
+      backgroundColor: '#1e3a8a', // Even darker when clicked
+      transform: 'scale(0.98)', // Pressed-in effect
+    },
+  }}
+  onClick={() => setLoginPopupOpen(true)}
+>
+  Login
+</Box>
+
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -222,6 +262,11 @@ export default function Layout() {
         <DrawerHeader />
         <Outlet context={[open]}/>
       </Main>
+      <LoginForm
+        open={isLoginPopupOpen}
+        onClose={() => setLoginPopupOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </Box>
   );
 }

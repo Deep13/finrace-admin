@@ -75,10 +75,10 @@ const Dashboard = () => {
         </Grid2>
 
         {/* Bottom Section: Area Charts */}
-        <Grid2 container spacing={2} xs={12} justifyContent="space-between" p={{ xs: 2, md: 4 }} sx={{ width: "100%" }}>
+        <Grid2 container spacing={2} xs={12} justifyContent="center" p={{ xs: 2, md: 4 }} sx={{ width: "100%", display:"flex", justifyContent:"center", }}>
           <Grid2
             xs={4} // Adjust width based on sidebar state
-            sx={{ display: 'flex', flexGrow: 1, justifyContent: "center" }}
+            sx={{ display: 'flex', maxWidth:"40%", justifyContent: "center" }}
           >
             <AreaChart
               title="Support Requests"
@@ -89,9 +89,9 @@ const Dashboard = () => {
             />
           </Grid2>
           <Grid2
-            xs={4} // Adjust width based on sidebar state
+            xs={open?6:4} // Adjust width based on sidebar state
            //md={open ? 9 : 6} // Adjust width for larger screens
-            sx={{ display: 'flex', flexGrow: 1, justifyContent: "center" }}
+            sx={{ display: 'flex', justifyContent: "center" , maxWidth:open?"60%":"40%"}}
           >
             <AreaChart
               title="Page Views"
@@ -101,10 +101,10 @@ const Dashboard = () => {
               sx={{ width: '100%' }} // Ensure chart takes up full width
             />
           </Grid2>
-          {/* Bar Chart Section for Traffic Sources */}
+          {/* Bar Chart Section for Traffic Sources  */}
           <Grid2
-            xs={4} // Adjust width based on sidebar state
-            sx={{ display: 'flex', flexGrow: 1, justifyContent: "center" }}
+            xs={open?12:4} // Adjust width based on sidebar state
+            sx={{ display: 'flex', justifyContent: "center", minWidth:open?"99%":"44%", maxWidth:open?"97%":"44%" }}
           >
             <HorizontalBarChart
               title="Traffic Sources"

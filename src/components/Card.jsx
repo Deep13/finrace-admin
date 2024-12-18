@@ -27,7 +27,7 @@ const ReportCard = ({
     <Card
       sx={{
         flexGrow: 1, // Let the card grow to fill available space
-        minWidth: isMobile ? '100%' : DrawerOpen ? '235px' : '300px', // Adjust width based on drawer state
+        minWidth: isMobile ? '100%' : DrawerOpen ? '235px' : '295px', // Adjust width based on drawer state
         transition: 'all 0.3s ease', // Smooth transitions
         margin: theme.spacing(1),
       }}
