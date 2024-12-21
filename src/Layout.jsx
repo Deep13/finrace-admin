@@ -22,8 +22,12 @@ import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlin
 import { useMediaQuery, InputBase, Avatar, Menu, MenuItem } from '@mui/material';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
+import { getUserDetails } from './utils/api';
+import { FiLogOut } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
+import AuthContext from './context/AuthContext';
 
 const drawerWidth = 240;
 
@@ -97,18 +101,54 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Layout() {
+  let navigate=useNavigate();
+
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [open, setOpen] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false); // Login state
+  // const [isLoggedIn, setIsLoggedIn] = React.useState(false); // Login state
+  const {isLoggedIn,setIsLoggedIn}=React.useContext(AuthContext);
   const [isLoginPopupOpen, setLoginPopupOpen] = React.useState(false);
+
 
   // Menu anchor state for User Avatar dropdown
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const [imageUrl, setImageUrl] = React.useState("");
+  // const [imageIsLoading, setImageIsLoading] = React.useState(false);
+
+  // Fetch user details on component mount
+  React.useLayoutEffect(() => {
+    // setImageIsLoading(true);
+    getUserDetails(
+      (data) => {
+        setImageUrl(data?.photo?.path); // Assuming the API returns `photo.path`
+        // setTimeout(() => setImageIsLoading(false), 4000);
+      },
+      (error) => {
+        console.error("Error fetching user details:", error);
+        // setImageIsLoading(false);
+      }
+    );
+  }, []);
   const handleLoginSuccess = () => {
+    // const userDetails = localStorage.getItem('userDetails');
+    
+    // if (userDetails) {
+    //   // const { photo } = JSON.parse(atob(userDetails));
+    //   console.log(userDetails);
+    //   setUserPhoto(userDetails?.photo?.path);
+    //   setIsLoggedIn(true);
+    // }
     setIsLoggedIn(true);
+    setLoginPopupOpen(false); // Close the login popup
   };
   const handleLogout=()=>{
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('userDetails')
+    setAnchorEl(null);
     setIsLoggedIn(false);
   }
   const handleMenuOpen = (event) => {
@@ -121,6 +161,10 @@ export default function Layout() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  if(!isLoggedIn){
+      navigate('/login');
+  }
 
   return (
     <Box sx={{ display: 'flex', width: '100%', overflowX: 'hidden' }}>
@@ -166,7 +210,7 @@ export default function Layout() {
               </IconButton>
               {/* User Avatar */}
               <IconButton onClick={handleMenuOpen} color="inherit">
-                <Avatar alt="User Profile" src="/static/images/avatar/1.jpg" />
+                <Avatar alt="User Profile" src={imageUrl} />
               </IconButton>
               {/* Dropdown Menu */}
               <Menu
@@ -174,8 +218,8 @@ export default function Layout() {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={handleMenuClose}><CgProfile style={{ marginRight: '8px' }}/>Profile</MenuItem>
+                <MenuItem onClick={handleLogout}><FiLogOut style={{ marginRight: '8px' }}/> Logout</MenuItem>
               </Menu>
             </Box>
             

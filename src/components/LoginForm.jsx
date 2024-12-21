@@ -9,7 +9,7 @@ import {
   Box,
   IconButton,
 } from '@mui/material';
-import { Login } from '../utils/login';
+import { Login } from '../utils/api';
 import CloseIcon from '@mui/icons-material/Close';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';

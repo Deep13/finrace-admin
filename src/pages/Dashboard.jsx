@@ -104,13 +104,13 @@ const Dashboard = () => {
           {/* Bar Chart Section for Traffic Sources  */}
           <Grid2
             xs={open?12:4} // Adjust width based on sidebar state
-            sx={{ display: 'flex', justifyContent: "center", minWidth:open?"99%":"44%", maxWidth:open?"97%":"44%" }}
+            sx={{ display: 'flex', justifyContent: "center", minWidth:open?"31%":"44%", maxWidth:open?"31%":"44%" }}
           >
             <HorizontalBarChart
               title="Traffic Sources"
               data={trafficSourcesData}
               labels={labels}
-              sx={{ width: '100%' }} // Ensure chart takes up full width
+              sx={{ width: '100%', height:'100%' }} // Ensure chart takes up full width
             />
           </Grid2>
         </Grid2>

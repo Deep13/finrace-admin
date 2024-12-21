@@ -37,3 +37,39 @@ export const Login = async (
       onError()
     }
   };
+
+
+export const getUserDetails = async (onSuccess, onError) => {
+    try {
+      // Retrieve the token from localStorage
+      const token = localStorage.getItem('token');
+  
+      if (!token) {
+        throw new Error('No token found in localStorage');
+      }
+  
+      // Make the GET request with the authorization header
+      const response = await fetch('https://www.missionatal.com/api/v1/auth/me', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json', // Optional, adjust if needed
+        },
+      });
+  
+      // Check if the response is OK
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
+      }
+  
+      // Parse and return the JSON data
+      const data = await response.json();
+      console.log("user", data)
+      onSuccess(data)
+    } catch (error) {
+      // Handle and log errors
+      console.error('Error fetching data:', error.message);
+      // throw error; // Re-throw to allow further handling if needed
+      onError(error)
+    }
+  };
